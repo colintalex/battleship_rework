@@ -18,7 +18,13 @@ class Board
   end
 
   def render
-    require "pry"; binding.pry
+    size = @rows.length
+    p "_|_#{@columns.join("_")}_=_"
+    size.times do |step|
+      p "-#{@rows[0 + step]}-| #{@cells.map {|k,v| v.render}[0..(size - 1)].join(" ")} |"
+      @rows.rotate!(size)
+      @cells.values.rotate!(size)
+    end
   end
 
   def place(ship, coordinates)
