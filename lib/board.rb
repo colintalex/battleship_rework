@@ -4,17 +4,63 @@ class Board
   attr_reader :cells
   def initialize(height = 4, width = 4)
     @cells = {}
-    @height = height - 1
-    @width = width - 1
+    @rows = ("A".."Z").to_a[0..(height - 1)]
+    @columns = (1..26).to_a[0..(width - 1)]
+    assemble_cells
   end
 
   def assemble_cells
-    rows = ("A".."Z").to_a[0..@height]
-    columns = (1..26).to_a[0..@width]
-    coordinates = rows.zip(columns).map { |coord| coord[0] + coord[1].to_s}
+    coordinates = @rows.product(@columns).map { |char, num| char + num.to_s}
     @cells = coordinates.reduce({}) do |filled_cells, coord|
       filled_cells[coord] = Cell.new(coord)
       filled_cells
     end
+  end
+
+  def valid_coordinate?(coordinate)
+    @cells.has_key?(coordinate)
+  end
+
+  def valid_placement?(ship, chosen_coordinates)
+    exist = coordinates_exist?(chosen_coordinates)
+    length = valid_length?(ship, chosen_coordinates)
+    consec = consecutive_coordinates?(chosen_coordinates)
+    if exist && length & consec
+      return true
+    else
+      false
+    end
+  end
+
+  def valid_length?(ship, chosen_coordinates)
+    if ship.length == chosen_coordinates.length
+      true
+    else
+      false
+    end
+  end
+
+  def coordinates_exist?(chosen_coordinates)
+    chosen_coordinates.all? {|coord| valid_coordinate?(coord)}
+  end
+
+  def consecutive_coordinates?(chosen_coordinates)
+    length = chosen_coordinates.length
+    char = chosen_coordinates.first.split("")[0]
+    num = chosen_coordinates.first.split("")[1]
+    compare = []
+    linear_char_set = []
+    linear_num_set = []
+    ascend_char_set = ("A".."Z").to_a[0..(length - 1)]
+    ascend_num_set = ("1".."26").to_a[0..(length - 1)]
+    length.times { |step| linear_char_set << char}
+    length.times { |step| linear_num_set << num}
+    down = linear_char_set.zip(ascend_num_set).map{|pair|pair.join}
+    right = ascend_char_set.zip(linear_num_set).map{|pair|pair.join}
+    diagonal = ascend_char_set.zip(ascend_num_set).map{|pair|pair.join}
+    compare << down
+    compare << right
+    compare << diagonal
+    compare.any?(chosen_coordinates)
   end
 end
