@@ -17,6 +17,12 @@ class Board
     end
   end
 
+  def place(ship, coordinates)
+    coordinates.each do |coord|
+      @cells[coord].place_ship(ship)
+    end
+  end
+
   def valid_coordinate?(coordinate)
     @cells.has_key?(coordinate)
   end
@@ -51,8 +57,8 @@ class Board
     compare = []
     linear_char_set = []
     linear_num_set = []
-    ascend_char_set = ("A".."Z").to_a[0..(length - 1)]
-    ascend_num_set = ("1".."26").to_a[0..(length - 1)]
+    ascend_char_set = (char.upcase.."Z").to_a[0..(length - 1)]
+    ascend_num_set = (num.."26").to_a[0..(length - 1)]
     length.times { |step| linear_char_set << char}
     length.times { |step| linear_num_set << num}
     down = linear_char_set.zip(ascend_num_set).map{|pair|pair.join}
