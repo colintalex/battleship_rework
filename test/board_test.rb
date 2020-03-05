@@ -74,7 +74,10 @@ class BoardTest < Minitest::Test
 
   def test_render_placement
     @board.place(@cruiser, ["A1", "A2", "A3"])
-    @board.render
+    expected = "_|_1_2_3_4_=_\n-A-| . . . . |\n-B-| . . . . |\n-C-| . . . . |\n-D-| . . . . |\n"
+    assert_equal expected, @board.render
+    expected_1 = "_|_1_2_3_4_=_\n-A-| S S S . |\n-B-| . . . . |\n-C-| . . . . |\n-D-| . . . . |\n"
+    assert_equal expected_1, @board.render(true)
   end
 end
 # pry(main)> board.place(cruiser, ["A1", "A2", "A3"])

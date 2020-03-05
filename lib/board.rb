@@ -17,20 +17,26 @@ class Board
     end
   end
 
-  def render
+  def render(show_ship = false)
     size = @rows.length
-    p "_|_#{@columns.join("_")}_=_"
+    cells = @cells.values.map {|v| v.render(show_ship)}
+    said = "_|_#{@columns.join("_")}_=_\n"
     size.times do |step|
-      p "-#{@rows[0 + step]}-| #{@cells.map {|k,v| v.render}[0..(size - 1)].join(" ")} |"
+      said += "-#{@rows[0 + step]}-| #{cells[0..(size - 1)].join(" ")} |\n"
       @rows.rotate!(size)
-      @cells.values.rotate!(size)
+      cells.rotate!(size)
     end
+    puts said
   end
 
   def place(ship, coordinates)
     coordinates.each do |coord|
       @cells[coord].place_ship(ship)
     end
+  end
+
+  def method_name
+
   end
 
   def valid_coordinate?(coordinate)
