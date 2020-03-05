@@ -17,6 +17,10 @@ class Board
     end
   end
 
+  def render
+    require "pry"; binding.pry
+  end
+
   def place(ship, coordinates)
     coordinates.each do |coord|
       @cells[coord].place_ship(ship)
@@ -47,7 +51,9 @@ class Board
   end
 
   def coordinates_exist?(chosen_coordinates)
-    chosen_coordinates.all? {|coord| valid_coordinate?(coord)}
+    chosen_coordinates.all? do |coord|
+      valid_coordinate?(coord) && @cells[coord].ship == nil
+    end
   end
 
   def consecutive_coordinates?(chosen_coordinates)

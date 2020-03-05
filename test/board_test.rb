@@ -66,4 +66,21 @@ class BoardTest < Minitest::Test
     assert_equal @cruiser, @cell_3.ship
     assert_equal @cell_2.ship, @cell_3.ship
   end
+
+  def test_overlapping_ships
+    @board.place(@cruiser, ["A1", "A2", "A3"])
+    refute @board.valid_placement?(@submarine, ["A1", "B1"])
+  end
+
+  def test_render_placement
+    @board.place(@cruiser, ["A1", "A2", "A3"])
+    @board.render
+  end
 end
+# pry(main)> board.place(cruiser, ["A1", "A2", "A3"])
+#
+# pry(main)> board.render
+# # => "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
+#
+# pry(main)> board.render(true)
+# # => "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
