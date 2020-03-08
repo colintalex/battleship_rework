@@ -9,6 +9,10 @@ class Board
     assemble_cells
   end
 
+  def height
+    @rows.length
+  end
+
   def assemble_cells
     coordinates = @rows.product(@columns).map { |char, num| char + num.to_s}
     @cells = coordinates.reduce({}) do |filled_cells, coord|
@@ -33,10 +37,6 @@ class Board
     coordinates.each do |coord|
       @cells[coord].place_ship(ship)
     end
-  end
-
-  def method_name
-
   end
 
   def valid_coordinate?(coordinate)

@@ -5,17 +5,11 @@ require_relative 'board'
 
 
 
-
-@game = Game.new("Colin")
-@game.welcome_loop
-
-
-@board = Board.new(10,10)
-@cruiser = Ship.new("Cruiser", 3)
-@submarine = Ship.new("Submarine", 2)
-
-@board.place(@cruiser, ["A1", "A2", "A3"])
-
-@board.render
-
-@board.render(show_ship = true)
+  @cruiser = Ship.new("Cruiser", 3)
+  @submarine = Ship.new("Submarine", 2)
+  @game = Game.new("Colin")
+  if @game.welcome_message == "p"
+    @game.start_game
+  elsif @game.welcome_message == "q"
+    @game.exit_game
+  end
