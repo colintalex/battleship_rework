@@ -19,9 +19,9 @@ class Game
 
   def welcome_message
     Screen.clear
-    puts "__________ Welcome to BATTLESHIP __________"
-    puts "- - Enter p to play. Enter q to quit. - -"
-    puts ">"
+    puts "__________ Welcome to BATTLESHIP __________".light_red
+    puts "- - Enter p to play. Enter q to quit. - -".green
+    puts ">".green
     play_input = $stdin.gets.chomp
     until play_input == "p" || play_input == "q" do
       Screen.clear
@@ -34,10 +34,10 @@ class Game
 
   def user_name
     Screen.clear
-    puts "Enter player name.\n>"
+    puts "Enter player name.\n>".green
     user_input = $stdin.gets.chomp
     Screen.clear
-    puts "You entered:  #{user_input}. Is this correct? (y/n)\n>"
+    puts "You entered:  #{user_input}. Is this correct? (y/n)\n>".green
     name_input = $stdin.gets.chomp
     user_name if name_input != "y"
     @name = user_input if name_input == "y"
@@ -120,13 +120,13 @@ class Game
     cpu_percent = "CPU: #{(cpu_count[:hits].to_f.round(2) / cpu_count[:fires]) * 100}%"
     user_percent = "User: #{(user_count[:hits].to_f.round(2) / user_count[:fires]) * 100}%"
     render_boards
-    puts "Game over! You win!" if cpu_ships_afloat.empty?
-    puts "Game over! I win!" if user_ships_afloat.empty?
-    puts "\n====================== GAME STATS ======================\n"
+    puts "Game over! You win!".light_green if cpu_ships_afloat.empty?
+    puts "Game over! I win!".light_green if user_ships_afloat.empty?
+    puts "\n====================== GAME STATS ======================\n".green
     puts " #{cpu_string} //// #{user_string}"
     puts " Hit Percentage => CPU: #{cpu_percent} User: #{user_percent}"
-    puts "\n========================================================\n"
-    puts "Want to play again? (y/n)"
+    puts "\n========================================================\n".green
+    puts "Want to play again? (y/n)".light_green
     input = $stdin.gets.chomp
     start_game if input.downcase == "y"
     exit_game if input.downcase == "n"
@@ -160,21 +160,21 @@ class Game
 
   def board_size
     Screen.clear
-    puts "Let's get started! First we need to decide on board size."
-    puts "========== The default board size is 4x4. ==========\n"
-    puts "If you want a LARGER board, type 'y' and hit ENTER.\n"
-    puts "If the default 4x4 works for you, just hit ENTER!"
+    puts "Let's get started! First we need to decide on board size.".light_magenta
+    puts "========== The default board size is 4x4. ==========\n".magenta
+    puts "If you want a LARGER board, type 'y' and hit ENTER.\n".light_magenta
+    puts "If the default 4x4 works for you, just hit ENTER!".magenta
     user_input = gets.chomp
     if user_input == "y"
-      p "Enter the board height you want:"
+      puts "Enter the board height you want:".green
       height = gets.chomp
-      p "Enter the board width you want:"
+      puts "Enter the board width you want:".green
       width = gets.chomp
       create_boards(height, width)
-      p "Let's play!"
+      puts "Let's play!".cyan
     elsif user_input != "y"
       create_boards()
-      p "Let's play!"
+      p "Let's play!".cyan
     end
   end
 
@@ -184,13 +184,13 @@ class Game
   end
 
   def render_boards
-    puts "\n==================== COMPUTER BOARD ====================\n"
+    puts "\n==================== COMPUTER BOARD ====================\n".blue
     @computer_board.render
-    puts "\n===================== HUMAN BOARD ======================\n"
+    puts "\n===================== HUMAN BOARD ======================\n".blue
     @user_board.render(true)
-    puts "\n........................................................\n"
-    puts "\n Computer ships floating: #{cpu_ships_afloat.count} /// User ships flaoting: #{user_ships_afloat.count}"
-    puts "\n........................................................\n"
+    puts "\n........................................................\n".light_blue
+    puts "\n Computer ships floating: #{cpu_ships_afloat.count} /// User ships flaoting: #{user_ships_afloat.count}".light_blue
+    puts "\n........................................................\n".light_blue
   end
 
   def place_computer_ships(ships)
