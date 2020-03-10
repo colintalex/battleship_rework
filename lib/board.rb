@@ -24,12 +24,23 @@ class Board
   def render(show_ship = false)
     size = @rows.length
     cells = @cells.values.map {|v| v.render(show_ship)}
-    said = "_|_#{@columns.join("_")}_=_\n"
-    size.times do |step|
-      said += "-#{@rows[0 + step]}-| #{cells[0..(size - 1)].join(" ")} |\n"
-      @rows.rotate!(size)
-      cells.rotate!(size)
+    if size > 10
+      b = "___|_#{@columns[0..8].join("__")}_"
+      said = b + "#{@columns[9..(size -1)].join("_")}_=_\n"
+      size.times do |step|
+        said += "-#{@rows[0 + step]}-| #{cells[0..(size - 1)].join("  ")} |\n"
+        @rows.rotate!(size)
+        cells.rotate!(size)
+      end
+    elsif size < 11
+      said = "___|_#{@columns.join("_")}_=_\n"
+      size.times do |step|
+        said += "-#{@rows[0 + step]}-| #{cells[0..(size - 1)].join(" ")} |\n"
+        @rows.rotate!(size)
+        cells.rotate!(size)
+      end
     end
+
     puts said
   end
 
@@ -46,7 +57,7 @@ class Board
   def valid_placement?(ship, chosen_coordinates)
     exist = coordinates_exist?(chosen_coordinates)
     length = valid_length?(ship, chosen_coordinates)
-    consec = consecutive_coordinates?(chosen_coordinates)
+    consec = consecutive_coordinates?(chosen_coordinates)[0]
     if exist && length & consec
       return true
     else
@@ -70,21 +81,32 @@ class Board
 
   def consecutive_coordinates?(chosen_coordinates)
     length = chosen_coordinates.length
-    char = chosen_coordinates.first.split("")[0]
-    num = chosen_coordinates.first.split("")[1]
+    char = chosen_coordinates.first.scan(/\D/).join
+    num = chosen_coordinates.first.scan(/\d/).join
     compare = []
     linear_char_set = []
     linear_num_set = []
     ascend_char_set = (char.upcase.."Z").to_a[0..(length - 1)]
+    descend_char_set = ("A"..char.upcase).to_a[0..(length - 1)]
     ascend_num_set = (num.."26").to_a[0..(length - 1)]
+    descend_num_set = ("1"..num).to_a[0..(length - 1)]
     length.times { |step| linear_char_set << char}
     length.times { |step| linear_num_set << num}
     down = linear_char_set.zip(ascend_num_set).map{|pair|pair.join}
     right = ascend_char_set.zip(linear_num_set).map{|pair|pair.join}
-    diagonal = ascend_char_set.zip(ascend_num_set).map{|pair|pair.join}
+    left = descend_char_set.zip(linear_num_set).map{|pair|pair.join}
+    diagonal_dr = ascend_char_set.zip(ascend_num_set).map{|pair|pair.join}
+    diagonal_ur = ascend_char_set.zip(descend_num_set.reverse).map{|pair|pair.join}
+    diagonal_dl = descend_char_set.reverse.zip(ascend_num_set).map{|pair|pair.join}.reverse
+    diagonal_ul = descend_char_set.zip(descend_num_set).map{|pair|pair.join}
+
     compare << down
     compare << right
-    compare << diagonal
-    compare.any?(chosen_coordinates)
+    compare << left
+    compare << diagonal_dr
+    compare << diagonal_dl
+    compare << diagonal_ur
+    compare << diagonal_ul
+    [compare.any?(chosen_coordinates), compare]
   end
 end

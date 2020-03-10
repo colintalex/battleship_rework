@@ -15,8 +15,12 @@ class Cell
   end
 
   def fire_upon
-      @fired_on = true
-      @ship.hit if !empty?
+      if @fired_on == false
+        @fired_on = true
+        @ship.hit if !empty?
+      elsif @fired_on == true
+        puts "Same spot twice."
+      end
   end
 
   def fired_upon?
