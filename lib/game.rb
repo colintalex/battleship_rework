@@ -1,3 +1,9 @@
+require 'bundler/inline'
+
+gemfile true do
+ source 'http://rubygems.org'
+ gem 'colorize'
+end
 require 'colorize'
 require_relative 'module/screenable'
 
